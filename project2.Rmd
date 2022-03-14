@@ -1,0 +1,178 @@
+---
+title: "Project 2 -  Parameter Estimation - Lizards Length to Weight "
+description: |
+  Here is a sample coding project and report from the Bren course ESM 244.
+output: 
+  distill::distill_article
+---
+```{r setup, include=TRUE, warning = FALSE, message = FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+
+#Attach packages
+library(tidyverse)
+library(here)
+library(janitor)
+library(broom)
+library(caret)
+library(kableExtra)
+library(modelr)
+```
+
+### A. Overview
+The purpose of this code is to utilize non-linear least squares to estimate parameters of a length to weight model for lizard populations in New Mexico at the Jornada Basin LTER site. 
+
+**Data Citation**: Source: Lightfoot, D. and W.G. Whitford. 2020. Lizard pitfall trap data from 11 NPP study locations at the Jornada Basin LTER site, 1989-2006 ver 37. Environmental Data Initiative. https://doi.org/10.6073/pasta/4a6e258fb49c31e222ecbbcfd128967f
+
+### B. Data and Analysis
+Read in the data and update sex in the table to be full name (i.e. Male and Female). 
+
+```{r}
+lizards <- read_csv(here("data", "lizard.csv")) %>% 
+    mutate(sex = case_when(sex == 'F' ~ 'Female',
+                         sex == 'M' ~ 'Male')) %>% 
+  clean_names()
+```
+
+#### I. Snout Length to Weight Model 
+A snout length to weight model of the following form is used for all lizards in the dataframe. The equation is: 
+
+$$ W = a(SVL)^b\ $$
+
+Where `weight` is given by W, snout to vent length by `SVL`, and `a` and `b` are the parameters that need to be fitted. Since the model is exponential in nature, we will log transform the data. Then, use standard OLS regression on the log transformed data to get approximations of the parameters `a` and `b` from the regression coefficients. 
+
+```{r}
+# model function
+weight_function <- function(a, sv_length, b) {
+  weight = a * (sv_length)^b
+  return(weight)
+}
+
+# log transform the data
+lizards_log <- lizards %>% 
+  mutate(log_weight = log(weight)) %>% 
+  mutate(log_length = log(sv_length))
+
+# standard OLS regression on log transformed data
+guess_model <- lm(log_weight ~ log_length, data = lizards_log)
+tidy_guess_model <- tidy(guess_model)
+
+# Using coefficients function, supply nls start list with regression coefficients
+coef <- coefficients(guess_model)
+
+# Mathematically transform intercept coefficient to get guess for parameter a
+lizards_nls <- nls(weight ~ weight_function(a, sv_length, b),
+                  data = lizards,
+                  start = list(
+                    a = 2.718^(coef[1]/coef[2]),
+                    b = coef[2]),
+                    trace = TRUE)
+
+# Update p-values since they are very small to be < 0.001 
+tidy_nls_table <- tidy(lizards_nls) %>% 
+  select(-statistic) %>% 
+  mutate(p.value = ifelse(p.value < 0.001, "< 0.001"))
+
+# Table formatting
+kable(tidy_nls_table,
+      col = c("Parameter", "Estimate", "Std Error", "p-value"), digits = 5,
+      caption = "Table 1. Approximation of Parameters from Regression Coefficients") %>% 
+  kable_styling(bootstrap_options = "striped", 
+                full_width = FALSE)
+
+model_fitted <- lizards_nls %>% 
+  broom::augment(type.predict = "response")
+
+```
+
+Regression coefficients: Intercept of the initial guess model is `r round(tidy_guess_model$estimate[1],2)`. The log length is `r round(tidy_guess_model$estimate[2],2)`. 
+
+#### II. Fitted Model Plot of Female and Male Lizards
+
+```{r}
+ggplot(lizards, aes(x = sv_length, y = weight, color = sex)) + 
+  geom_point(aes(x = sv_length, y = weight, color = sex)) +
+  geom_line(data = model_fitted, aes(x = sv_length, y = .fitted, color = "General Model Prediction")) +
+  theme_linedraw() +
+  labs(x = "Snout to Vent Length SVL (mm)", 
+       y = "Weight (g)", 
+       title = "Lizard Snout to Vent Length SVL (mm) vs Weight (g) by Sex", 
+       subtitle = "Jornada Basin LTER (1989-2006)",
+       color = "Species and Model") + 
+  scale_color_manual(values = c( "orange", "#0339fc", "#50C878")) +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"), # center title/subtitle
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.background = element_rect(fill = "#f5ebeb"), # change background color
+        legend.background = element_blank(),
+        legend.box.background = element_rect(colour = "black")) # frame around legend
+
+```
+
+**Figure 1.** Fitted non-linear regression model prediction plotted over data points of snout to vent length (mm) vs weight (g) for all lizards in the dataset, with female and male lizards separated by color. Data: Lightfoot, D. and W.G. Whitford. 2020.
+
+#### III. Data Visualization of NLS Model for Subset of Male Western Whiptail lizard *(Cnemidophorus tigrisatus)*
+We will create a species-specific subset model for male western whiptails only.
+
+```{r}
+whiptail <- lizards %>% 
+  filter(spp == "CNTI" & sex == "Male")
+
+# log transform the data again
+whip_log <- whiptail %>% 
+  mutate(log_weight = log(weight)) %>% 
+  mutate(log_length = log(sv_length))
+
+# standard OLS regression on log transformed data
+whip_model <- lm(log_weight ~ log_length, data = whip_log)
+tidy_whip_model <- tidy(whip_model)
+
+# Using coefficients function, supply nls start list with regression coefficients
+whip_coef <- coefficients(whip_model)
+
+# Mathematically transform intercept coefficient to get guess for parameter a
+
+whip_nls <- nls(weight ~ weight_function(a, sv_length, b),
+                  data = whiptail,
+                  start = list(
+                    a = 2.718^(coef[1]/coef[2]),
+                    b = whip_coef[2]),
+                    trace = TRUE)
+
+whip_model_fitted <- whip_nls %>% 
+  broom::augment(type.predict = "response")
+```
+
+Comparison of the output from the species-specific nls model to the general nls model for all species by graphing the model fits on the Western Whiptail male data. 
+
+```{r}
+# Calculate RMSE values
+
+# Model fits on Western Whiptail male points
+ggplot(whiptail, aes(x = sv_length, y = weight, color = sex)) + 
+  geom_point(aes(x = sv_length, y = weight, color = sex)) +
+  geom_line(data = model_fitted, aes(x = sv_length, 
+                                     y = .fitted, 
+                                     color = "General Model Prediction")) + # general nls
+  geom_line(data = whip_model_fitted, aes(x = sv_length, 
+                                          y = .fitted, 
+                                          color = "Whiptail Model Prediction")) + # whip nls 
+  theme_linedraw() +
+  labs(x = "Snout to Vent Length SVL (mm)", 
+       y = "Weight (g)", 
+       title = "Whiptail Male Snout to Vent Length (mm) vs Weight (g)", 
+       subtitle = "Jornada Basin LTER (1989-2006)",
+       color = "Specices and Models") + 
+  scale_color_manual(values = c("#0339fc", "#50C878", "red")) +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"), # center title/subtitle
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.background = element_rect(fill = "#f5ebeb"), # change background color
+        legend.background = element_blank(),
+        legend.box.background = element_rect(colour = "black")) # frame around legend
+
+  
+lizards_rmse <- rmse(lizards_nls, data = whip_log)
+whip_rmse <- rmse(whip_nls, data = whip_log)
+```
+
+**Figure 2.** Fitted non-linear regression model prediction for the entire dataset compared with the non-linear regression model for only Western Whiptail male *(Cnemidophorus tigrisatus)*. The model predictions are plotted over data points of snout to vent length (mm) vs weight (g) for all lizards in the dataset, with female and male lizards separated by color. The RMSE value for the general model is `r round(lizards_rmse, 2)` while for the Whiptail male model it is `r round(whip_rmse, 2)`. The lower RMSE value for the Whiptail male model demonstrates that the species-specific model should be used for this subset. Data: Lightfoot, D. and W.G. Whitford. 2020.
+
+

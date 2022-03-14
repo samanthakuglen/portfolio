@@ -1,0 +1,22 @@
+---
+title: "Welcome"
+description: |
+  Welcome to my site! This is my first blog post as part of the course ESM 244.
+author:
+  - name: Samantha Kuglen
+date: 2022-01-23
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+Distill is a publication format for scientific and technical writing, native to the web.
+
+Learn more about using Distill at <https://rstudio.github.io/distill>.
+
+

@@ -1,0 +1,191 @@
+---
+title: "Project 1 - Model Selection of CalCOFI Data"
+description: |
+  Here is a sample coding project and report from the Bren course ESM 244.
+output: 
+  distill::distill_article
+---
+
+### A. Overview
+This report provides an exploratory review on the relationship between O2 saturation of seawater off California’s coast and several physical and chemical variables. Specifically, we examine and compare model selection for (1) Oxygen saturation as a function of water temperature, salinity, and phosphate concentration and (2) Oxygen saturation as a function of water temp, salinity, phosphate concentration, and depth.The purpose of this analysis is to determine which of the two models is more parsimonious, or in other words, provides predictive performance with simplicity and accuracy. This data is important because it provides important information about seawater in the California Current System that may influence or affect ecosystem processes. 
+
+### B. Data and Analysis
+The data contain observations from [CalCOFI seawater sample data](https://calcofi.org/ccdata.html). A 70+ year hydrographic time-series includes temperature, salinity, oxygen and phosphate observations, along with nutrient analysis of silicate, nitrate and nitrite. An AIC corrected (AICc) comparison between the two models is used to inform which model is a better fit, with preference for the model with lower AICc. Following AICc comparison of two linear regression models, a ten-fold cross validation is performed. The cross validation reserves a subset of data (test data) and trains our model using the rest (training data) to estimate the model parameters. All analyses are in R version 4.0.2 using RStudio version 1.3.1056.
+
+
+```{r setup, include=TRUE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+
+# Attach packages
+library(tidyverse)
+library(here)
+library(AICcmodavg)
+library(kableExtra)
+library(equatiomatic)
+
+```
+
+```{r}
+# Read in the data
+calcofi_data <- read_csv(here("data", "calcofi_seawater_samples.csv"))
+```
+
+### I. AIC Comparison of Two Linear Regression Models 
+
+**Model 1:** Oxygen saturation as a function of water temperature, salinity, and phosphate concentration. **Model 2:** Oxygen saturation as a function of water temp, salinity, phosphate concentration, and depth.
+
+```{r}
+# Model 1 linear model with defined parameters
+f1 <- o2sat ~ t_deg_c + salinity + po4u_m
+mdl1 <- lm(f1, data = calcofi_data)
+
+# Model 2 linear model with defined parameters
+f2 <- o2sat ~ t_deg_c + salinity + po4u_m + depth_m
+mdl2 <- lm(f2, data = calcofi_data)
+```
+
+
+AICc is used to select the better model, with a consideration the difference of AICc between the two models. 
+
+```{r}
+# Use `aictab` to compare the models 
+aic_table <- AICcmodavg::aictab(list(mdl1, mdl2)) %>% 
+  rename("Model" = "Modnames")
+
+kable(aic_table,
+      caption = "Table 1: Models 1 and 2 AIC corrected (AICc) Values") %>% 
+  kable_styling(bootstrap_options = "striped", 
+                full_width = FALSE) 
+
+```
+
+Model 2's AICc is `r round(aic_table[1, 3], 3)` while Model 1's AICc `r round(aic_table[2, 3], 3)`, with a difference in AIC's of `r round(aic_table[2, 3], 3) - round(aic_table[1, 3], 3)`. Model 2's AICc is lower than model 1 and means that it is the preferred model and a better fit, based on AICc. 
+
+### II. Ten-fold Cross Validation of the Two Models
+Ten-fold cross validation is used with root-mean-square error (RMSE) as the scoring method and the final model is trained on the full dataset. 
+
+```{r}
+# Assign number of folds and create a folds vector
+folds <- 10
+fold_vec <- rep(1:folds, length.out = nrow(calcofi_data))
+
+# Starting number to generate sequence of random numbers
+set.seed(50)
+
+seawater_fold <- calcofi_data %>% 
+  mutate(group = sample(fold_vec, size = n(), replace = FALSE))
+
+# First fold
+test_df <- seawater_fold %>% 
+  filter(group == 1) 
+train_df <- seawater_fold %>% 
+  filter(group != 1)
+```
+
+RMSE goes in reverse order of these operations - find error (predicted actual), square it, find the average, then take the square root. 
+
+```{r}
+# Calculate the RMSE value
+calc_rmse <- function(x, y) {
+  rmse_result <- (x - y)^2 %>%  mean() %>%  sqrt()
+  return(rmse_result)
+}
+```
+
+The training dataset is used to create two linear regression models, based on the formulas above.
+
+```{r}
+# Training dataset is based on fold 1
+training_mdl1 <- lm(f1, data = train_df)
+training_mdl2 <- lm(f2, data = train_df)
+```
+
+The trained models are then used to predict on test data. 
+
+```{r}
+predict_test <- test_df %>% 
+  mutate(model1 = predict(training_mdl1, test_df),
+         model2 = predict(training_mdl2, test_df))
+
+# Calculate RMSE values
+rmse_predict_test <- predict_test %>% 
+  summarize(rmse_mdl1 = round(calc_rmse(model1, o2sat), digits = 3),
+            rmse_mdl2 = round(calc_rmse(model2, o2sat), digits = 3)) 
+
+kable(rmse_predict_test,
+      col = c("RMSE Model 1",
+              "RMSE Model 2"),
+      caption = "Table 2: Test Data RMSE Values for Models 1 and 2") %>% 
+  kable_styling(bootstrap_options = "striped", 
+                full_width = FALSE)
+
+```
+
+Comparison of RMSE values for Models 1 and 2 using the test dataframe with fold 1. RMSE for model 2 is lower, so it is preferred. 
+
+Calculation over all folds and taking the average of RMSE values. 
+
+```{r}
+rmse_df <- data.frame()
+
+# Iterate over all 10 folds to get RMSE values and store in a dataframe
+for(i in 1:folds) {
+  kfold_test_df <- seawater_fold %>% 
+    filter(group == i)
+  kfold_train_df <- seawater_fold %>% 
+    filter(group != i)
+  
+  kfold_mdl1 <- lm(f1, data = kfold_train_df)
+  kfold_mdl2 <- lm(f2, data = kfold_train_df)
+  
+  kfold_pred_df <- kfold_test_df %>% 
+    mutate(mdl1 = predict(kfold_mdl1, kfold_test_df),
+           mdl2 = predict(kfold_mdl2, .))
+  
+  kfold_rmse <- kfold_pred_df %>% 
+    summarize(rmse_mdl1 = calc_rmse(mdl1, o2sat),
+              rmse_mdl2 = calc_rmse(mdl2, o2sat))
+  
+  rmse_df <- bind_rows(rmse_df, kfold_rmse)
+}
+
+# Use the dataframe from above to calculate the mean RMSE values for each model
+rmse_table <- rmse_df %>% 
+  summarize(mean_rmse_mdl1 = mean(rmse_mdl1),
+            mean_rmse_mdl2 = mean(rmse_mdl2)) 
+
+kable(rmse_table,
+      col = c("Mean RMSE Model 1",
+                      "Mean RMSE Model 2"),
+      caption = "Table 3: Average RMSE values for each model over all folds") %>% 
+  kable_styling(bootstrap_options = "striped", 
+                full_width = FALSE)
+```
+
+We find that Model 2 has a lower average RMSE than Model 1, at values of `r round(rmse_table[1, 2], 3)` and `r round(rmse_table[1, 1], 3)`, respectively. The 10 cross validation informs us that Model 2 has the best fit and predicts the observed values for oxygen saturation `o2sat` with the most accuracy. 
+
+Once we have chosen the model via cross validation (Model 2), we train our final model on our entire dataset. 
+
+```{r}
+final_mdl <- lm(f2, data = calcofi_data)
+```
+
+Our final parameterized model: 
+`r equatiomatic::extract_eq(final_mdl, wrap = TRUE)`
+
+Our final parameterized model with coefficients: 
+`r equatiomatic::extract_eq(final_mdl, wrap = TRUE, use_coefs = TRUE)`
+
+### Summary
+Data analysis reveals the following findings:
+
+- Model 2's AICc is lower than Model 1 and means that it is the preferred model and a better fit, based on AICc.
+- Model 2 has a lower average RMSE than Model 1. The 10-fold cross validation informs us that Model 2 has the best fit and predicts the observed values for oxygen saturation `o2sat` with the most accuracy. 
+- Model 2: *Oxygen saturation as a function of water temp, salinity, phosphate concentration, and depth* is overall the most accurate model to inform our final parameterized model.
+
+
+### Data Citation
+CalCOFI data are available for use without restriction. Data downloaded from https://calcofi.org/ccdata.html.  Accessed 1/10/2022.
+
+
+

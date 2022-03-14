@@ -1,0 +1,25 @@
+---
+title: "Midterms"
+description: |
+  It is week 6! Midterms...
+author:
+  - name: Samantha Kuglen
+    url: {}
+date: 2022-02-06
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+Hi everyone, posting a quick update as part of my ESM 244 course. It's currently week 6 (out of 10 weeks, in the UC quarter system). I am currently taking GIS, Ecology, Biogeochemistry, Politics of the Environment, and Advanced Data Science. I'm currently prepping for my Biogeochemistry midterm... got to go study now! 
+
+Distill is a publication format for scientific and technical writing, native to the web.
+
+Learn more about using Distill at <https://rstudio.github.io/distill>.
+
+

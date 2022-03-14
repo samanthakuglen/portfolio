@@ -1,0 +1,41 @@
+---
+title: "CV"
+description: |
+---
+
+# Education
+
+-   University of California, Santa Barbara (UCSB) - Bren School of Environmental Science & Management
+
+    -   Master of Environmental Science Management with a Specialization in Conservation Planning and Coastal Marine Resources Management (4.00/4.00)
+
+-   University of California, San Diego (UCSD)
+
+    -   Bachelor of Science in Marine Biology and Minor in Environmental Studies
+
+# Work Experience
+
+-   Graduate Student Reader -- UCSB Environmental Studies Department
+
+    -   Santa Barbara, CA (01/22 -- 03/22)
+
+-   Watershed Stewards Program (WSP) -- Americorps, National Park Service
+
+    -   Golden Gate National Recreation Area & Point Reyes National Seashore & (10/20--08/21)
+
+-   Research Assistant -- NOAA Southwest Fisheries Science Center
+
+    -   La Jolla, CA (11/18--07/19)
+
+-   Marine Biology & Ocean Operations (MBOO) Intern -- City of San Diego
+
+    -   San Diego, CA (10/17--10/18)
+
+# Awards
+
+-   Biological Sciences Undergraduate Excellence in Teaching Award 2018-2019
+
+# Outreach and Involvement
+
+-   Clinton Global Initiative University (CGI U) Conference 2018
+-   Alternative Breaks at UC San Diego

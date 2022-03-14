@@ -1,0 +1,16 @@
+---
+title: "Project 4"
+description: |
+  Project 4 - Mooring Recovery and Repair Video at the City of San Diego
+output: 
+  distill::distill_article
+---
+```{r, include = FALSE}
+library(vembedr)
+```
+
+```{r, echo = FALSE}
+embed_url("https://youtu.be/UqIPjEeJ2wg")
+```
+
+Here is a video I create to document a mooring recovery and repair by the City of San Diego Marine Biology and Ocean Operations in conjunction with Scripps Institution of Oceanography. There's some background ship noises... but volume is not necessary. 

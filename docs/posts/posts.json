@@ -1,0 +1,36 @@
+[
+  {
+    "path": "posts/2022-02-06-midterms/",
+    "title": "Midterms",
+    "description": "It is week 6! Midterms...",
+    "author": [
+      {
+        "name": "Samantha Kuglen",
+        "url": {}
+      }
+    ],
+    "date": "2022-02-06",
+    "categories": [],
+    "contents": "\nHi everyone, posting a quick update as part of my ESM 244 course. It’s currently week 6 (out of 10 weeks, in the UC quarter system). I am currently taking GIS, Ecology, Biogeochemistry, Politics of the Environment, and Advanced Data Science. I’m currently prepping for my Biogeochemistry midterm… got to go study now!\nDistill is a publication format for scientific and technical writing, native to the web.\nLearn more about using Distill at https://rstudio.github.io/distill.\n\n\n\n",
+    "preview": {},
+    "last_modified": "2022-02-25T14:52:32-08:00",
+    "input_file": {}
+  },
+  {
+    "path": "posts/2022-01-23-welcome/",
+    "title": "Welcome",
+    "description": "Welcome to my site! This is my first blog post as part of the course ESM 244.",
+    "author": [
+      {
+        "name": "Samantha Kuglen",
+        "url": {}
+      }
+    ],
+    "date": "2022-01-23",
+    "categories": [],
+    "contents": "\nDistill is a publication format for scientific and technical writing, native to the web.\nLearn more about using Distill at https://rstudio.github.io/distill.\n\n\n\n",
+    "preview": {},
+    "last_modified": "2022-02-25T14:52:32-08:00",
+    "input_file": {}
+  }
+]

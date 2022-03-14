@@ -1,0 +1,17 @@
+---
+title: "Project 3 - Outreach Video"
+description: |
+  National Park Service Video about Coho Salmon and Steelhead Trout in the California Bay Area
+output: 
+  distill::distill_article
+---
+
+```{r, include = FALSE}
+library(vembedr)
+```
+
+```{r, echo = FALSE}
+embed_url("https://youtu.be/bgaPfxAe2H8")
+```
+
+Here is an outreach video I produced and narrated for the National Park Service at Point Reyes National Seashore and Golden Gate National Recreation Area. It highlights the salmonid smolt trapping program in the California Bay Area as part of the [San Francisco Bay Area Inventory & Monitoring Network!](https://www.nps.gov/im/sfan/index.htm)

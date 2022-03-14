@@ -1,0 +1,18 @@
+---
+title: "Sam Kuglen"
+image: "self.jpg"
+site: distill::distill_website
+links:
+  - label: LinkedIn
+    url: "https://linkedin.com/in/samantha-kuglen/"
+  - label: Twitter
+    url: "https://twitter.com/samanthakuglen"
+  - label: GitHub
+    url: "https://github.com/samanthakuglen"
+  - label: Email
+    url: "mailto:samanthakuglen@ucsb.edu"
+
+output:
+  postcards::jolla_anim
+---
+Current graduate student at the UC Santa Barbara Bren School, Master of Environmental Science & Management program. I am passionate about addressing how human pollutants and climate variability affect ocean ecosystems and fisheries management. I aspire to help agencies make informed decisions in coastal marine resource use and ecological management. 

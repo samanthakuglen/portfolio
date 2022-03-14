@@ -1,0 +1,18 @@
+---
+title: "About this site"
+description: |
+  This website was created as part of the UC Santa Barbara Bren School course, ESM 244. 
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+![](water.jpg)
+In my most recent job I worked at Point Reyes National Seashore and Golden Gate National Recreation Area monitoring coho salmon and steelhead trout. In this photo, I am taking a sample for water quality measurements. 
+
+![](scuba.JPG)
+In my free time, I enjoy scuba diving and have my PADI Advanced Open Water Certification. 
+
+![](fam.jpg)
+Here's me and my family in Illigan City, Philippines. 
