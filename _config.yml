@@ -1,0 +1,15 @@
+title: Samantha Kuglen
+logo: "/images/self.jpg?raw=true"
+description: >
+  6 years of experience in environmental science at the intersection of the terrestrial, oceanic, and built environments. <br>
+  - M.S. Environmental Management | UCSB Bren School <br>
+  - B.S. Marine Biology | UCSD Scripps Institution of Oceanography <br>
+  <br>
+  Past roles working in climate tech, government, and academic research. <br>
+  <br>
+  <a href="https://samanthakuglen.github.io/portfolio/projects/my_resume.pdf">View My Resume</a> 
+
+remote_theme: pages-themes/minimal@v0.2.0
+plugins:
+  - jekyll-remote-theme
+google_analytics: UA-000000-0 # Replace with your Google Analytics tracking ID if you have one
