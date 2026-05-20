@@ -2,20 +2,15 @@
 
 ## Environmental Data Science Projects
 
-[American Geophysical Union (AGU) Abstract](https://agu.confex.com/agu/agu24/meetingapp.cgi/Paper/1746838)
+[American Geophysical Union (AGU) Abstract](https://agu.confex.com/agu/agu24/meetingapp.cgi/Paper/1746838) <img src="images/agu.png?raw=true" width="480"/>
 
 ------------------------------------------------------------------------
 
-[Historical Ocean Temperature Data in the Santa Barbara Channel](https://samanthakuglen.shinyapps.io/sb_coral_reef_shiny_app/) <img src="images/heatmap.png?raw=true" width="480"/>
+[Shiny App: Historical Ocean Temperature Data in the Santa Barbara Channel](https://samanthakuglen.shinyapps.io/sb_coral_reef_shiny_app/) <img src="images/heatmap.png?raw=true" width="480"/>
 
 ------------------------------------------------------------------------
 
 [Spatial Distribution of Acacias in San Francisco](projects/tmap.html) <img src="images/tmap.png?raw=true" width="480"/>
-
-
-------------------------------------------------------------------------
-
-[Binary Logistic Regression for Classifying Plants](projects/binary_regression.html) <img src="images/binary.png?raw=true" width="480"/>
 
 ------------------------------------------------------------------------
 
