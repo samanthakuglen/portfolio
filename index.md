@@ -2,11 +2,11 @@
 
 ## Projects
 
-[American Geophysical Union (AGU) Abstract](https://agu.confex.com/agu/agu24/meetingapp.cgi/Paper/1746838) <img src="images/marine_equipment.png?raw=true" width="480"/>
+[American Geophysical Union (AGU) Abstract on marine carbon dioxide removal - 2025](https://agu.confex.com/agu/agu24/meetingapp.cgi/Paper/1746838) <img src="images/marine_equipment.png?raw=true" width="480"/>
 
 ------------------------------------------------------------------------
 
-[R Shiny App: Historical Ocean Temperature Data in the Santa Barbara Channel](https://samanthakuglen.shinyapps.io/sb_coral_reef_shiny_app/) <img src="images/heatmap.png?raw=true" width="480"/>
+# [R Shiny App: Historical Ocean Temperature Data in the Santa Barbara Channel](https://samanthakuglen.shinyapps.io/sb_coral_reef_shiny_app/) <img src="images/heatmap.png?raw=true" width="480"/>
 
 ------------------------------------------------------------------------
 
