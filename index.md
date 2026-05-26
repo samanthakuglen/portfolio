@@ -1,16 +1,12 @@
 ------------------------------------------------------------------------
 
-## Environmental Data Science Projects
+## Projects
 
-[American Geophysical Union (AGU) Abstract](https://agu.confex.com/agu/agu24/meetingapp.cgi/Paper/1746838) <img src="images/agu.png?raw=true" width="480"/>
-
-------------------------------------------------------------------------
-
-[Shiny App: Historical Ocean Temperature Data in the Santa Barbara Channel](https://samanthakuglen.shinyapps.io/sb_coral_reef_shiny_app/) <img src="images/heatmap.png?raw=true" width="480"/>
+[American Geophysical Union (AGU) Abstract](https://agu.confex.com/agu/agu24/meetingapp.cgi/Paper/1746838) <img src="images/marine_equipment.png?raw=true" width="480"/>
 
 ------------------------------------------------------------------------
 
-[Spatial Distribution of Acacias in San Francisco](projects/tmap.html) <img src="images/tmap.png?raw=true" width="480"/>
+[R Shiny App: Historical Ocean Temperature Data in the Santa Barbara Channel](https://samanthakuglen.shinyapps.io/sb_coral_reef_shiny_app/) <img src="images/heatmap.png?raw=true" width="480"/>
 
 ------------------------------------------------------------------------
 
@@ -18,7 +14,7 @@
 
 ------------------------------------------------------------------------
 
-[Undergraduate Research Poster: Anomalous Marine Heatwaves](./projects/marine_heatwave_poster.pdf)<img src="images/blob.png?raw=true" width="480"/>
+[Research Poster: Anomalous Marine Heatwaves](./projects/marine_heatwave_poster.pdf)<img src="images/blob.png?raw=true" width="480"/>
 
 ------------------------------------------------------------------------
 
