@@ -2,7 +2,7 @@
 
 # Projects
 
-### [American Geophysical Union (AGU) Abstract - 2025](https://agu.confex.com/agu/agu24/meetingapp.cgi/Paper/1746838) <img src="images/marine_equipment.png?raw=true" width="480"/>
+### [American Geophysical Union (AGU) Abstract - 2025](https://agu.confex.com/agu/agu24/meetingapp.cgi/Paper/1746838) <img src="images/agu.png?raw=true" width="480"/>
 
 ------------------------------------------------------------------------
 
